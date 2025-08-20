@@ -509,6 +509,21 @@ abstract class AbstractPart
             $endnote = $parent->addEndnote();
             $endnote->setRelationId($wId);
         } elseif ($node->nodeName == 'w:pict') {
+            $imageStyle=null;
+            $pictStyle = $xmlReader->getAttribute('style', $node, 'v:shape');
+            if ($pictStyle!=null){
+                $imageStyle=[];
+                foreach (explode(';', $pictStyle) as $attribute){
+                    if (!empty($attribute)){
+                        [$attributeKey,$attributeVal] = explode(':',$attribute);
+                        $attributeKey = str_replace('-', ' ', $attributeKey);
+                        $attributeKey = ucwords($attributeKey);
+                        $attributeKey = str_replace(' ', '', $attributeKey);
+                        $attributeVal = preg_replace('/\s*pt\s*/', '', $attributeVal);
+                        $imageStyle[$attributeKey]=$attributeVal;
+                    }
+                }
+            }
             // Image
             $rId = $xmlReader->getAttribute('r:id', $node, 'v:shape/v:imagedata');
             $target = $this->getMediaTarget($docPart, $rId);
@@ -518,7 +533,7 @@ abstract class AbstractPart
                 } else {
                     $imageSource = "zip://{$this->docFile}#{$target}";
                 }
-                $parent->addImage($imageSource);
+                $parent->addImage($imageSource,$imageStyle);
             }
         } elseif ($node->nodeName == 'w:drawing') {
             // Office 2011 Image
