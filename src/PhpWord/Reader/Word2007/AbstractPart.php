@@ -280,6 +280,9 @@ abstract class AbstractPart
                     }
                 }
             }
+            if (is_array($paragraphStyle) && count($paragraphStyle)>0){
+                $shapeStyle = array_merge($shapeStyle, $paragraphStyle);
+            }
             $textBox = $parent->addTextBox($shapeStyle);
             $nodes = $xmlReader->getElements('w:r/w:pict/v:shape/v:textbox/w:txbxContent/*', $domNode);
             foreach ($nodes as $_node){
