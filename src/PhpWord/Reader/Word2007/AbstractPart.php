@@ -266,10 +266,10 @@ abstract class AbstractPart
         } elseif ($xmlReader->elementExists('w:r/w:pict/v:shape/v:textbox', $domNode)) {
             //textbox
             $shapeStyle=null;
-            $_style = $xmlReader->getAttribute('style', $domNode, 'w:r/w:pict/v:shape');
-            if ($_style!=null){
+            $styleVal = $xmlReader->getAttribute('style', $domNode, 'w:r/w:pict/v:shape');
+            if ($styleVal!=null){
                 $shapeStyle=[];
-                foreach (explode(';', $_style) as $attribute){
+                foreach (explode(';', $styleVal) as $attribute){
                     if (!empty($attribute)){
                         [$attributeKey,$attributeVal] = explode(':',$attribute);
                         $attributeKey = str_replace('-', ' ', $attributeKey);
@@ -285,8 +285,8 @@ abstract class AbstractPart
             }
             $textBox = $parent->addTextBox($shapeStyle);
             $nodes = $xmlReader->getElements('w:r/w:pict/v:shape/v:textbox/w:txbxContent/*', $domNode);
-            foreach ($nodes as $_node){
-                $this->readParagraph($xmlReader,$_node,$textBox,$docPart);
+            foreach ($nodes as $node){
+                $this->readParagraph($xmlReader,$node,$textBox,$docPart);
             }
             return;
         }
@@ -536,10 +536,10 @@ abstract class AbstractPart
             $endnote->setRelationId($wId);
         } elseif ($node->nodeName == 'w:pict') {
             $shapeStyle=null;
-            $_style = $xmlReader->getAttribute('style', $node, 'v:shape');
-            if ($_style!=null){
+            $styleVal = $xmlReader->getAttribute('style', $node, 'v:shape');
+            if ($styleVal!=null){
                 $shapeStyle=[];
-                foreach (explode(';', $_style) as $attribute){
+                foreach (explode(';', $styleVal) as $attribute){
                     if (!empty($attribute)){
                         [$attributeKey,$attributeVal] = explode(':',$attribute);
                         $attributeKey = str_replace('-', ' ', $attributeKey);
